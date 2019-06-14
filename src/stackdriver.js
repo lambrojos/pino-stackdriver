@@ -6,7 +6,6 @@ const through2 = require('through2')
 const { Logging } = require('@google-cloud/logging')
 
 const PINO_LEVELS = { trace: 10, debug: 20, info: 30, warn: 40, error: 50, fatal: 60 }
-// const STACKDRIVER_SEVERITIES = { default: 0, debug: 100, info: 200, notice: 300, warning: 400, error: 500, critical: 600, alert: 700, emergency: 800 }
 
 function _jsonParser (str) {
   const result = fastJsonParse(str)

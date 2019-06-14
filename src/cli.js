@@ -11,13 +11,24 @@ function main () {
     .version(pkg.version)
     .option('-c, --credentials <credentials>', 'The file path of the JSON file that contains your service account key')
     .option('-p, --project <project>', 'Your Google Cloud Platform project ID')
-    .action(({ credentials, project }) => {
+    .option('-n, --log_name <log_name>', 'The log name')
+    .option('-r, --resource_name <resource_name>', 'The resource name')
+    .action(({ credentials, project, resourceName, logName }) => {
       try {
         if (!process.env.GOOGLE_APPLICATION_CREDENTIALS && !credentials) { throw Error('Credentials are missing.') }
         const _credentials = credentials || process.env.GOOGLE_APPLICATION_CREDENTIALS
         if (!process.env.PROJECT_ID && !project) { throw Error('Project is missing.') }
+
         const _project = project || process.env.PROJECT_ID
-        const writeStream = stackdriver.createWriteStream({ credentials: _credentials, projectId: _project })
+        const _logName = logName || process.env.STACKDRIVER_LOG_NAME
+        const _resource = resourceName || process.env.STACKDRIVER_RESOURCE
+
+        const writeStream = stackdriver.createWriteStream({
+          resource: _resource ? { type: _resource } : null,
+          credentials: _credentials,
+          projectId: _project,
+          logName: _logName
+        })
         process.stdin.pipe(writeStream)
         console.info('logging')
       } catch (error) {
