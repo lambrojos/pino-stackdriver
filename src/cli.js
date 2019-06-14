@@ -24,7 +24,7 @@ function main () {
         const _resource = resourceName || process.env.STACKDRIVER_RESOURCE
 
         const writeStream = stackdriver.createWriteStream({
-          resource: _resource ? { type: _resource } : null,
+          resource: _resource ? JSON.parse(_resource) : null,
           credentials: _credentials,
           projectId: _project,
           logName: _logName
